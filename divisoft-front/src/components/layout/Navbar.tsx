@@ -6,9 +6,9 @@ import { useUi } from '../../store/ui'
 
 const ENLACES = [
   { label: 'Inicio', to: '/' },
-  { label: 'Servicios', to: '/#servicios' },
-  { label: 'Software', to: '/#proceso' },
-  { label: 'Soluciones', to: '/#soluciones' },
+  { label: 'Servicios', to: '/servicios' },
+  { label: 'Proceso', to: '/#proceso' },
+  { label: 'Por qué Divisoft', to: '/#soluciones' },
   { label: 'Contacto', to: '/#contacto' },
 ]
 

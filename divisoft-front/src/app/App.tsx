@@ -3,6 +3,10 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { useSesion } from '../store/sesion'
 import { Aviso, AppShell } from '../components/layout/Marcos'
 import { LandingPage } from '../pages/LandingPage'
+import { CatalogoPage } from '../pages/catalogo/CatalogoPage'
+import { CategoriaPage } from '../pages/catalogo/CategoriaPage'
+import { ServicioPage } from '../pages/catalogo/ServicioPage'
+import { PrivacidadPage } from '../pages/PrivacidadPage'
 import { LoginPage } from '../pages/LoginPage'
 import { RegistroPage } from '../pages/RegistroPage'
 import { PerfilPage } from '../pages/PerfilPage'
@@ -29,6 +33,10 @@ function Rutas() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/servicios" element={<CatalogoPage />} />
+      <Route path="/servicios/:categoria" element={<CategoriaPage />} />
+      <Route path="/servicios/:categoria/:slug" element={<ServicioPage />} />
+      <Route path="/privacidad" element={<PrivacidadPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/registro" element={<RegistroPage />} />
       <Route

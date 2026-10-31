@@ -59,7 +59,7 @@ html[data-theme="light"] nav a:hover{color:#1c2230;background:#e7e9f6}
 html[data-theme="light"] nav a:first-child,html[data-theme="light"] nav a:first-child:hover{color:#fff;background:linear-gradient(#1a237e,#2833ff)}
 html[data-theme="light"] .button{color:#fff;background:#2833ff}
 html[data-theme="light"] .button.outline{color:#2833ff;background:#fff;border-color:#6d5cff}
-html[data-theme="light"] .service,html[data-theme="light"] .service h3,.value-grid h3{color:#141824}
+html[data-theme="light"] .service,html[data-theme="light"] .service h3,html[data-theme="light"] .value-grid h3{color:#141824}
 html[data-theme="light"] .service p,html[data-theme="light"] .value-grid p{color:#3c4456}
 html[data-theme="light"] .steps li.active{color:#fff}
 html[data-theme="light"] .section-heading>a{color:#5b45ef}

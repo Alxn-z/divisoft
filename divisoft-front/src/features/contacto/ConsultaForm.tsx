@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { ArrowRight } from 'lucide-react'
 import { ApiError, api } from '../../services/http'
@@ -69,7 +70,7 @@ export function ConsultaForm() {
     >
       {({ isSubmitting, status }) => (
         <Form noValidate>
-          <label>Tu nombre<Field name="nombre" autoComplete="name" maxLength={120} autoFocus /></label>
+          <label>Tu nombre<Field name="nombre" autoComplete="name" maxLength={120} /></label>
           <ErrorMessage name="nombre" component="p" className="contact-error" />
           <label>Correo electrónico<Field name="correo" type="email" autoComplete="email" maxLength={254} /></label>
           <ErrorMessage name="correo" component="p" className="contact-error" />
@@ -83,7 +84,7 @@ export function ConsultaForm() {
             <span>Autorizo a Divisoft a guardar estos datos y contactarme para atender esta consulta.</span>
           </label>
           <ErrorMessage name="consentimiento" component="p" className="contact-error" />
-          <p className="form-note">Usaremos tus datos para atender tu solicitud. No incluyas contraseñas ni información sensible.</p>
+          <p className="form-note">Usaremos tus datos para atender tu solicitud, como se explica en la <Link to="/privacidad">política de privacidad</Link>. No incluyas contraseñas ni información sensible.</p>
           {status ? <p role="alert" className="contact-error">{status}</p> : null}
           <button className="button" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Guardando consulta…' : 'Enviar consulta'}<ArrowRight size={18} /></button>
         </Form>

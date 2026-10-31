@@ -1,34 +1,42 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, BrainCircuit, ChartNoAxesColumnIncreasing, Check, Cloud, CodeXml, Lightbulb, Megaphone, Menu, Moon, Rocket, Scale, Settings, ShieldCheck, Sun, UserRoundCheck, Users, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, ChartNoAxesColumnIncreasing, Check, CodeXml, FileText, ShieldCheck, X } from 'lucide-react'
 import { HeroScene } from '../landing/HeroScene'
 import { ProcessScene } from '../landing/ProcessScene'
 import { SoftwareScene } from '../landing/SoftwareScene'
+import { BarraPublica } from '../landing/BarraPublica'
 import { ConsultaForm } from '../features/contacto/ConsultaForm'
+import { categorias } from '../catalogo/datos'
+import { iconosCategoria } from '../catalogo/iconos'
 import '../landing/divisoft.css'
 import '../landing/scenes.css'
+import '../landing/catalogo.css'
 
-const services = [
-  { icon: CodeXml, title: 'Desarrollo de Software', desc: 'Aplicaciones web, apps y plataformas digitales a medida.', detail: 'Creamos aplicaciones web, móviles y plataformas adaptadas a tus procesos y objetivos.' },
-  { icon: BrainCircuit, title: 'IA y Automatización', desc: 'Integramos inteligencia artificial para optimizar tus procesos.', detail: 'Automatiza tareas repetitivas e integra asistentes inteligentes en tu operación.' },
-  { icon: ChartNoAxesColumnIncreasing, title: 'Análisis de Datos', desc: 'Convierte tus datos en decisiones que generen resultados.', detail: 'Centraliza tu información y entiende tu negocio con tableros e indicadores claros.' },
-  { icon: Megaphone, title: 'Marketing Digital', desc: 'Estrategia y contenido tecnológico para hacer crecer tu marca.', detail: 'Conectamos tu marca con sus audiencias a través de estrategia, contenido y canales digitales.' },
-  { icon: Cloud, title: 'Consultoría Tecnológica', desc: 'Te ayudamos a definir e implementar la mejor estrategia tecnológica.', detail: 'Evaluamos tus necesidades y diseñamos una ruta tecnológica para tu empresa.' },
-  { icon: Scale, title: 'Asesoría Legal Digital', desc: 'Acompañamiento legal para tu negocio en el entorno digital.', detail: 'Orientación para identificar las necesidades legales de tu proyecto digital.' },
+const descripciones: Record<string, string> = {
+  'desarrollo-de-software': 'Aplicaciones web, apps y plataformas digitales a medida.',
+  'ia-y-automatizacion': 'Integramos inteligencia artificial para optimizar tus procesos.',
+  'analisis-de-datos': 'Convierte tus datos en decisiones que generen resultados.',
+  'marketing-digital': 'Estrategia y contenido tecnológico para hacer crecer tu marca.',
+  'consultoria-tecnologica': 'Te ayudamos a definir e implementar la mejor estrategia tecnológica.',
+  'asesoria-legal-digital': 'Acompañamiento legal para tu negocio en el entorno digital.',
+  'servicios-complementarios': 'Documentos, presentaciones y encargos cortos, sin abrir un proyecto completo.',
+}
+const situaciones = [
+  { icon: CodeXml, title: 'Necesito una página o un sistema', desc: 'Una landing, una tienda o una plataforma para operar el negocio.', to: '/servicios/desarrollo-de-software' },
+  { icon: ChartNoAxesColumnIncreasing, title: 'Necesito ordenar datos o un trámite', desc: 'Un tablero, una hoja que se actualice sola o un flujo entre las herramientas que ya usas.', to: '/servicios/analisis-de-datos' },
+  { icon: FileText, title: 'Necesito una pieza o un contrato', desc: 'Diseño, presentaciones o los documentos para publicar y contratar tecnología.', to: '/servicios/marketing-digital' },
 ]
-const values = [
-  { icon: Settings, title: 'Soluciones a medida', desc: 'Desarrollamos software que se adapta a tus objetivos.' },
-  { icon: Users, title: 'Equipo multidisciplinario', desc: 'Expertos en desarrollo, IA, datos, marketing y asesoría legal digital.' },
-  { icon: Lightbulb, title: 'Enfoque en tu negocio', desc: 'Entendemos tus retos y diseñamos soluciones alineadas a tus metas.' },
-  { icon: ShieldCheck, title: 'Tecnología de vanguardia', desc: 'Aplicamos las mejores herramientas y prácticas para crear soluciones robustas y seguras.' },
-  { icon: Rocket, title: 'Innovación continua', desc: 'Exploramos nuevas oportunidades para que tu negocio siempre vaya un paso adelante.' },
-  { icon: UserRoundCheck, title: 'Acompañamiento cercano', desc: 'Te guiamos en cada etapa, con comunicación clara y un equipo siempre disponible.' },
+const metodologia = [
+  { titulo: 'El caso', texto: 'Cuentas qué necesitas, para quién y para cuándo. Respondemos con preguntas concretas.' },
+  { titulo: 'El alcance', texto: 'Antes de empezar queda escrito qué entra, qué no entra, los entregables y la fecha. El presupuesto se confirma ahí.' },
+  { titulo: 'El avance', texto: 'Ves el trabajo mientras avanza. Un encargo corto tiene una entrega y ajustes. Un proyecto avanza por fases.' },
+  { titulo: 'La entrega', texto: 'Recibes lo acordado y una nota de cómo usarlo. El encargo cierra con esos entregables.' },
+  { titulo: 'Después', texto: 'Soporte, mantenimiento o una fase siguiente solo si se contratan. No quedan abiertos de palabra.' },
 ]
 
 export function LandingPage() {
-  const [menu, setMenu] = useState(false)
-  const [selected, setSelected] = useState<number | null>(null)
   const [contact, setContact] = useState(false)
-  const close = () => { setSelected(null); setContact(false) }
+  const close = () => setContact(false)
 
   useEffect(() => {
     document.documentElement.classList.add('divisoft')
@@ -36,10 +44,10 @@ export function LandingPage() {
   }, [])
 
   useEffect(() => {
-    if (selected === null && !contact) return
+    if (!contact) return
     const prior = document.activeElement as HTMLElement | null
     const handle = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setSelected(null); setContact(false) }
+      if (e.key === 'Escape') setContact(false)
       if (e.key === 'Tab') {
         const elements = Array.from(document.querySelectorAll<HTMLElement>('.modal button:not([disabled]),.modal input:not([tabindex="-1"]),.modal textarea'))
         const first = elements[0]
@@ -56,43 +64,17 @@ export function LandingPage() {
       document.body.style.overflow = ''
       prior?.focus()
     }
-  }, [selected, contact])
+  }, [contact])
 
   return (
     <main>
-      <header className="wrap nav">
-        <a className="brand" href="#inicio" aria-label="Divisoft, inicio"><img className="logo-dark" src="/logo.jpg" alt="" /><img className="logo-light" src="/logo-light.png" alt="" /></a>
-        <nav className={menu ? 'open' : ''}>
-          {[['Inicio', 'inicio'], ['Servicios', 'servicios'], ['Software', 'proceso'], ['Soluciones', 'soluciones'], ['Contacto', 'contacto']].map(([t, id]) => (
-            <a key={id} onClick={() => setMenu(false)} href={'#' + id}>{t}</a>
-          ))}
-        </nav>
-        <div className="nav-tools">
-          <button
-            className="theme-toggle"
-            type="button"
-            aria-label="Cambiar entre tema blanco y oscuro"
-            onClick={() => {
-              const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'
-              document.documentElement.dataset.theme = next
-              try { localStorage.setItem('divisoft_tema', next) } catch { /* el tema sigue en la página */ }
-            }}
-          >
-            <Sun className="icon-sun" size={16} />
-            <Moon className="icon-moon" size={16} />
-            <span className="label-light">Blanco</span>
-            <span className="label-dark">Oscuro</span>
-          </button>
-          <button className="menu" aria-label="Abrir menú" onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</button>
-          <button className="button small nav-cta" onClick={() => setContact(true)}>Hablemos <ArrowRight size={18} /></button>
-        </div>
-      </header>
+      <BarraPublica onHablemos={() => setContact(true)} />
       <section id="inicio" className="hero section">
         <div className="wrap hero-grid">
           <div className="hero-copy">
             <p className="eyebrow">DESARROLLO DE SOFTWARE</p>
             <h1>Creamos software<br />que <span>impulsa tu negocio</span></h1>
-            <p className="intro">Desarrollamos soluciones digitales a medida para transformar tus ideas en productos reales. Te acompañamos con automatización, IA, análisis de datos, marketing y asesoría legal digital como soporte complementario.</p>
+            <p className="intro">Tomamos un encargo corto, como una página, un tablero o un documento, y también un sistema completo. El mismo equipo cubre software, automatización, datos, marketing y asesoría legal digital.</p>
             <div className="actions">
               <a href="#servicios" className="button">Conoce nuestros servicios <ArrowRight size={18} /></a>
               <button className="button outline" onClick={() => setContact(true)}>Cuéntanos tu proyecto</button>
@@ -111,17 +93,20 @@ export function LandingPage() {
           <p className="eyebrow">NUESTROS SERVICIOS</p>
           <div className="section-heading">
             <h2>Soluciones digitales <span>para tu empresa</span></h2>
-            <a href="#cards">Ver todos los servicios <ArrowRight size={16} /></a>
+            <Link to="/servicios">Ver todos los servicios <ArrowRight size={16} /></Link>
           </div>
           <div className="service-grid" id="cards">
-            {services.map((s, i) => (
-              <button className={'service ' + (i === 0 ? 'featured' : '')} key={s.title} onClick={() => setSelected(i)}>
-                <s.icon className="service-icon" />
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-                <span className="circle"><ArrowRight size={19} /></span>
-              </button>
-            ))}
+            {categorias.map((categoria) => {
+              const Icono = iconosCategoria[categoria.slug]
+              return (
+                <Link className="service" key={categoria.slug} to={`/servicios/${categoria.slug}`}>
+                  <Icono className="service-icon" />
+                  <h3>{categoria.nombre}</h3>
+                  <p>{descripciones[categoria.slug]}</p>
+                  <span className="explore">Explorar servicios <ArrowRight size={16} /></span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -130,16 +115,24 @@ export function LandingPage() {
           <div className="process-photo">
             <ProcessScene />
             <ol className="steps">
-              {['Descubrimiento', 'Diseño UX/UI', 'Desarrollo', 'Implementación', 'Soporte y crecimiento'].map((s, i) => (
-                <li className={i === 2 ? 'active' : ''} aria-current={i === 2 ? 'step' : undefined} key={s}><Check size={17} />{s}</li>
+              {metodologia.map((paso) => (
+                <li key={paso.titulo}><Check size={17} />{paso.titulo}</li>
               ))}
             </ol>
           </div>
           <div className="process-copy">
             <p className="eyebrow">NUESTRO PROCESO</p>
-            <h2>De tu idea a un<br /><span>producto digital real</span></h2>
-            <p>Te acompañamos en todo el proceso, desde la estrategia y el diseño hasta el desarrollo, lanzamiento y evolución continua de tu solución digital.</p>
-            <button className="button outline" onClick={() => setSelected(0)}>Conoce nuestro proceso <ArrowRight size={18} /></button>
+            <h2>Cómo trabajamos <span>un encargo</span></h2>
+            <p>El orden es el mismo para una pieza corta y para un proyecto. Cambia la profundidad, no los pasos.</p>
+            <ol className="metodologia" id="metodologia">
+              {metodologia.map((paso, indice) => (
+                <li key={paso.titulo}>
+                  <strong>{indice + 1}. {paso.titulo}</strong>
+                  <span>{paso.texto}</span>
+                </li>
+              ))}
+            </ol>
+            <a className="button outline" href="#metodologia">Conoce nuestro proceso <ArrowRight size={18} /></a>
           </div>
           <div className="art process-art" role="img" aria-label="Interfaces de software y soluciones a medida"><SoftwareScene /></div>
         </div>
@@ -151,15 +144,15 @@ export function LandingPage() {
               <p className="eyebrow">NUESTRA PROPUESTA DE VALOR</p>
               <h2>¿Por qué Divisoft?</h2>
             </div>
-            <p>Una combinación única de talento, tecnología y visión de negocio<br />para crear soluciones digitales que generen un impacto real.</p>
+            <p>Tres situaciones en las que suele empezar un cliente. Eliges la línea y ves los servicios de esa categoría.</p>
           </div>
           <div className="value-grid">
-            {values.map((v) => (
-              <article key={v.title}>
+            {situaciones.map((v) => (
+              <Link key={v.title} to={v.to}>
                 <div className="value-icon"><v.icon /></div>
                 <h3>{v.title}</h3>
                 <p>{v.desc}</p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -169,26 +162,21 @@ export function LandingPage() {
           <div className="contact-copy">
             <p className="eyebrow">HABLEMOS</p>
             <h2>¿Tienes un <span>proyecto</span><br />en mente?</h2>
-            <p>Conversemos sobre tus ideas y diseñemos juntos una solución digital que impulse tu negocio. Estamos listos para ayudarte a hacerla realidad.</p>
-            <div className="actions">
-              <button className="button" onClick={() => setContact(true)}>Contactar ahora <ArrowRight size={18} /></button>
-              <a className="button outline" href="#servicios">Ver nuestros servicios</a>
-            </div>
+            <p>Deja el caso en el formulario. Te respondemos al correo que escribas. El presupuesto se confirma cuando el alcance queda por escrito.</p>
           </div>
-          <div className="contact-art">
-            <img className="contact-photo logo-dark" src="/logo.jpg" alt="Divisoft" />
-            <img className="contact-photo logo-light" src="/logo-light.png" alt="Divisoft" />
+          <div className="contact-panel">
+            <ConsultaForm />
           </div>
         </div>
       </section>
-      {(selected !== null || contact) && (
+      {contact && (
         <div className="modal-backdrop" onClick={close}>
-          <section role="dialog" aria-modal="true" aria-label={contact ? 'Cuéntanos tu proyecto' : 'Detalles del servicio'} className="modal" onClick={(e) => e.stopPropagation()}>
+          <section role="dialog" aria-modal="true" aria-label="Cuéntanos tu proyecto" className="modal" onClick={(e) => e.stopPropagation()}>
             <button className="close" onClick={close} aria-label="Cerrar"><X /></button>
             <p className="eyebrow">CONSTRUYAMOS JUNTOS</p>
-            <h2>{contact ? 'Cuéntanos tu proyecto' : services[selected!].title}</h2>
-            <p>{contact ? 'Cuéntanos tu idea y deja tus datos para que podamos atender tu proyecto.' : services[selected!].detail}</p>
-            {contact ? <ConsultaForm /> : <button className="button" onClick={() => { setSelected(null); setContact(true) }}>Hablemos de tu proyecto <ArrowRight size={18} /></button>}
+            <h2>Cuéntanos tu proyecto</h2>
+            <p>Cuéntanos tu idea y deja tus datos para que podamos atender tu proyecto.</p>
+            <ConsultaForm />
           </section>
         </div>
       )}
